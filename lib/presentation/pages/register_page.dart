@@ -1,8 +1,8 @@
-// lib/presentation/pages/register_page.dart
+import 'package:appwrite/appwrite.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../controllers/auth_controller.dart';
-import 'login_page.dart';
+import 'package:versus_match/controllers/auth_controller.dart';
+
 
 class RegisterPage extends ConsumerStatefulWidget {
   const RegisterPage({super.key});
@@ -12,33 +12,73 @@ class RegisterPage extends ConsumerStatefulWidget {
 }
 
 class _RegisterPageState extends ConsumerState<RegisterPage> {
-  final _email = TextEditingController();
-  final _password = TextEditingController();
-  final _name = TextEditingController();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _usernameController = TextEditingController();
+  String _errorMessage = '';
+  bool _isLoading = false;
 
-  void _register() async {
+  Future<void> _handleRegister() async {
+    setState(() {
+      _isLoading = true;
+      _errorMessage = '';
+    });
+
+    final authController = ref.read(authControllerProvider);
+
     try {
-      await ref.read(authControllerProvider).signUp(_email.text, _password.text, _name.text);
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Registro exitoso')));
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const LoginPage()));
+      await authController.register(
+        _emailController.text.trim(),
+        _passwordController.text.trim(),
+        _usernameController.text.trim(),
+      );
+
+      if (!mounted) return;
+      Navigator.pushReplacementNamed(context, '/home');
+    } on AppwriteException catch (e) {
+      setState(() {
+        _errorMessage = e.message ?? 'Error al registrar.';
+      });
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Registro fallido: $e')));
+      setState(() {
+        _errorMessage = 'Ocurrió un error inesperado.';
+      });
+    } finally {
+      setState(() => _isLoading = false);
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Registro')),
+      appBar: AppBar(title: const Text('Registrarse')),
       body: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            TextField(controller: _name, decoration: const InputDecoration(labelText: 'Nombre')),
-            TextField(controller: _email, decoration: const InputDecoration(labelText: 'Email')),
-            TextField(controller: _password, obscureText: true, decoration: const InputDecoration(labelText: 'Password')),
+            TextField(
+              controller: _usernameController,
+              decoration: const InputDecoration(labelText: 'Nombre de usuario'),
+            ),
+            TextField(
+              controller: _emailController,
+              decoration: const InputDecoration(labelText: 'Correo electrónico'),
+            ),
+            TextField(
+              controller: _passwordController,
+              obscureText: true,
+              decoration: const InputDecoration(labelText: 'Contraseña'),
+            ),
             const SizedBox(height: 20),
-            ElevatedButton(onPressed: _register, child: const Text('Registrarse')),
+            if (_errorMessage.isNotEmpty)
+              Text(_errorMessage, style: const TextStyle(color: Colors.red)),
+            const SizedBox(height: 20),
+            _isLoading
+                ? const CircularProgressIndicator()
+                : ElevatedButton(
+                    onPressed: _handleRegister,
+                    child: const Text('Registrarse'),
+                  ),
           ],
         ),
       ),

@@ -1,41 +1,79 @@
-// lib/presentation/pages/login_page.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../controllers/auth_controller.dart';
-import 'home_page.dart';
+import 'package:versus_match/controllers/auth_controller.dart';
+import 'package:appwrite/appwrite.dart';
+
 
 class LoginPage extends ConsumerStatefulWidget {
-  const LoginPage({super.key});
+  const LoginPage({Key? key}) : super(key: key);
 
   @override
   ConsumerState<LoginPage> createState() => _LoginPageState();
 }
 
 class _LoginPageState extends ConsumerState<LoginPage> {
-  final _email = TextEditingController();
-  final _password = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
-  void _login() async {
+  String _errorMessage = '';
+  bool _isLoading = false;
+
+  Future<void> _handleLogin() async {
+    setState(() {
+      _isLoading = true;
+      _errorMessage = '';
+    });
+
+    final email = _emailController.text.trim();
+    final password = _passwordController.text.trim();
+    final authController = ref.read(authControllerProvider);
+
     try {
-      await ref.read(authControllerProvider).signIn(_email.text, _password.text);
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const HomePage()));
+      await authController.login(email, password);
+
+      // Navegar a home si el login es exitoso
+      if (!mounted) return;
+      Navigator.pushReplacementNamed(context, '/home');
+    } on AppwriteException catch (e) {
+      setState(() {
+        _errorMessage = e.message ?? 'Error desconocido al iniciar sesión.';
+      });
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Login failed: $e')));
+      setState(() {
+        _errorMessage = 'Ocurrió un error inesperado.';
+      });
+    } finally {
+      setState(() => _isLoading = false);
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Login')),
+      appBar: AppBar(title: const Text('Iniciar Sesión')),
       body: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            TextField(controller: _email, decoration: const InputDecoration(labelText: 'Email')),
-            TextField(controller: _password, obscureText: true, decoration: const InputDecoration(labelText: 'Password')),
+            TextField(
+              controller: _emailController,
+              decoration: const InputDecoration(labelText: 'Correo electrónico'),
+            ),
+            TextField(
+              controller: _passwordController,
+              obscureText: true,
+              decoration: const InputDecoration(labelText: 'Contraseña'),
+            ),
             const SizedBox(height: 20),
-            ElevatedButton(onPressed: _login, child: const Text('Login')),
+            if (_errorMessage.isNotEmpty)
+              Text(_errorMessage, style: const TextStyle(color: Colors.red)),
+            const SizedBox(height: 20),
+            _isLoading
+                ? const CircularProgressIndicator()
+                : ElevatedButton(
+                    onPressed: _handleLogin,
+                    child: const Text('Iniciar sesión'),
+                  ),
           ],
         ),
       ),
