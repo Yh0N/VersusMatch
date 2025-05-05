@@ -1,33 +1,21 @@
-// lib/controllers/auth_controller.dart
-import 'package:appwrite/appwrite.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../data/repositories/auth_repository.dart';
-import 'package:appwrite/models.dart' as models;
+import 'package:versus_match/core/providers/appwrite_providers.dart';
+import 'package:versus_match/data/repositories/auth_repository.dart';
+import 'package:appwrite/models.dart';
 
-final authControllerProvider = Provider<AuthController>((ref) {
+final authControllerProvider = Provider((ref) {
   final repo = ref.read(authRepositoryProvider);
   return AuthController(repo);
 });
 
-final authRepositoryProvider = Provider<AuthRepository>((ref) {
-  final client = Client()
-    ..setEndpoint('https://cloud.appwrite.io/v1') // reemplaza con tu endpoint
-    ..setProject('YOUR_PROJECT_ID'); // reemplaza con tu ID de proyecto
-  return AuthRepository(Account(client));
-});
-
 class AuthController {
-  final AuthRepository _repository;
+  final AuthRepository _repo;
 
-  AuthController(this._repository);
+  AuthController(this._repo);
 
-  Future<models.User?> getCurrentUser() => _repository.getCurrentUser();
-
-  Future<void> signUp(String email, String password, String name) =>
-      _repository.signUp(email: email, password: password, name: name);
-
-  Future<models.Session> signIn(String email, String password) =>
-      _repository.signIn(email: email, password: password);
-
-  Future<void> logout() => _repository.logout();
+  Future<User> getCurrentUser() => _repo.getCurrentUser();
+  Future<Session> login(String email, String password) => _repo.login(email: email, password: password);
+  Future<void> logout() => _repo.logout();
+  Future<User> register(String email, String password, String username) =>
+      _repo.register(email: email, password: password, username: username);
 }

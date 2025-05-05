@@ -1,0 +1,54 @@
+lib/
+│
+├── controllers/
+│   ├── auth_controller.dart
+│   ├── user_controller.dart
+│   ├── team_controller.dart
+│   ├── challenge_controller.dart
+│   └── chat_controller.dart
+│
+├── core/
+│   ├── config/
+│   │   └── app_config.dart
+│   └── constants/
+│       ├── appwrite_constants.dart
+│       └── app_colors.dart
+│
+├── data/
+│   ├── repositories/
+│   │   ├── auth_repository.dart
+│   │   ├── user_repository.dart
+│   │   ├── team_repository.dart
+│   │   ├── challenge_repository.dart
+│   │   └── chat_repository.dart
+│   └── services/
+│       └── location_service.dart
+│
+├── model/
+│   ├── user_model.dart
+│   ├── team_model.dart
+│   ├── challenge_model.dart
+│   └── message_model.dart
+│
+├── presentation/
+│   ├── pages/
+│   │   ├── splash_page.dart
+│   │   ├── login_page.dart
+│   │   ├── register_page.dart
+│   │   ├── home_page.dart
+│   │   ├── team_profile_page.dart
+│   │   ├── challenge_page.dart
+│   │   ├── create_team_page.dart
+│   │   ├── join_team_page.dart
+│   │   ├── chat_page.dart
+│   │   ├── calendar_page.dart
+│   │   └── notifications_page.dart
+│   └── widgets/
+│       ├── team_card.dart
+│       ├── challenge_card.dart
+│       ├── calendar_widget.dart
+│       ├── message_bubble.dart
+│       ├── notification_tile.dart
+│       └── search_filter_bar.dart
+│
+└── main.dart
