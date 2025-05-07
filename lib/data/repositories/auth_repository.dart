@@ -9,7 +9,10 @@ class AuthRepository {
   Future<User> getCurrentUser() => _account.get();
 
   Future<Session> login({required String email, required String password}) {
-    return _account.createEmailPasswordSession(email: email, password: password);
+    return _account.createEmailPasswordSession(
+      email: email,
+      password: password,
+    );
   }
 
   Future<void> logout() {
@@ -21,11 +24,18 @@ class AuthRepository {
     required String password,
     required String username,
   }) async {
-    return await _account.create(
+    // 1. Crear usuario en Auth
+    await _account.create(
       userId: ID.unique(),
       email: email,
       password: password,
       name: username,
     );
+
+    // 2. Crear sesión
+    await _account.createEmailPasswordSession(email: email, password: password);
+
+    // 3. Obtener usuario con su $id
+    return await _account.get();
   }
 }

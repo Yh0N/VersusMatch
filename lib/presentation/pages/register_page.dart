@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:versus_match/controllers/auth_controller.dart';
 
-
 class RegisterPage extends ConsumerStatefulWidget {
   const RegisterPage({super.key});
 
@@ -19,6 +18,17 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
   bool _isLoading = false;
 
   Future<void> _handleRegister() async {
+    final email = _emailController.text.trim();
+    final password = _passwordController.text.trim();
+    final username = _usernameController.text.trim();
+
+    if (email.isEmpty || password.isEmpty || username.isEmpty) {
+      setState(() {
+        _errorMessage = 'Todos los campos son obligatorios.';
+      });
+      return;
+    }
+
     setState(() {
       _isLoading = true;
       _errorMessage = '';
@@ -27,11 +37,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
     final authController = ref.read(authControllerProvider);
 
     try {
-      await authController.register(
-        _emailController.text.trim(),
-        _passwordController.text.trim(),
-        _usernameController.text.trim(),
-      );
+      await authController.register(email, password, username);
 
       if (!mounted) return;
       Navigator.pushReplacementNamed(context, '/home');
@@ -44,15 +50,23 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
         _errorMessage = 'Ocurrió un error inesperado.';
       });
     } finally {
-      setState(() => _isLoading = false);
+      if (mounted) setState(() => _isLoading = false);
     }
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    _usernameController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Registrarse')),
-      body: Padding(
+      body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
@@ -62,6 +76,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
             ),
             TextField(
               controller: _emailController,
+              keyboardType: TextInputType.emailAddress,
               decoration: const InputDecoration(labelText: 'Correo electrónico'),
             ),
             TextField(

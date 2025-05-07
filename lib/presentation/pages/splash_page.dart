@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:versus_match/controllers/auth_controller.dart';
 
-
 class SplashPage extends ConsumerStatefulWidget {
   const SplashPage({super.key});
 
@@ -22,8 +21,7 @@ class _SplashPageState extends ConsumerState<SplashPage> {
     final authController = ref.read(authControllerProvider);
 
     try {
-      final user = await authController.getCurrentUser();
-
+      await authController.getCurrentUser();
       if (!mounted) return;
       Navigator.pushReplacementNamed(context, '/home');
     } on AppwriteException {
@@ -39,7 +37,16 @@ class _SplashPageState extends ConsumerState<SplashPage> {
   Widget build(BuildContext context) {
     return const Scaffold(
       body: Center(
-        child: CircularProgressIndicator(), // Puedes poner un logo si deseas
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            FlutterLogo(size: 80),
+            SizedBox(height: 20),
+            CircularProgressIndicator(),
+            SizedBox(height: 10),
+            Text('Cargando...', style: TextStyle(fontSize: 16)),
+          ],
+        ),
       ),
     );
   }

@@ -10,7 +10,7 @@ import 'package:versus_match/data/repositories/user_repository.dart';
 final clientProvider = Provider<Client>((ref) {
   return Client()
     ..setEndpoint('https://cloud.appwrite.io/v1') // O tu endpoint
-    ..setProject('65ea6e1c9f5b2f7c1a34'); // O tu project ID
+    ..setProject('680e6eac0019ea6300d2'); // O tu project ID
 });
 
 final accountProvider = Provider<Account>((ref) {

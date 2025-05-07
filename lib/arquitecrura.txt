@@ -10,9 +10,13 @@ lib/
 ├── core/
 │   ├── config/
 │   │   └── app_config.dart
-│   └── constants/
-│       ├── appwrite_constants.dart
-│       └── app_colors.dart
+│   |── constants/
+│   |    ├── appwrite_constants.dart
+│   |    └── app_colors.dart
+|   ├──providers/
+|   |   └── appwrite_providers.dart
+|   ├──theme/
+|       └── app_theme.dart 
 │
 ├── data/
 │   ├── repositories/
@@ -21,14 +25,15 @@ lib/
 │   │   ├── team_repository.dart
 │   │   ├── challenge_repository.dart
 │   │   └── chat_repository.dart
+|    ├── models/
+    │   ├── user_model.dart
+    │   ├── team_model.dart
+    │   ├── challenge_model.dart
+    │   └── message_model.dart
 │   └── services/
 │       └── location_service.dart
 │
-├── model/
-│   ├── user_model.dart
-│   ├── team_model.dart
-│   ├── challenge_model.dart
-│   └── message_model.dart
+
 │
 ├── presentation/
 │   ├── pages/

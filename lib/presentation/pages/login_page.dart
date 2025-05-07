@@ -3,18 +3,16 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:versus_match/controllers/auth_controller.dart';
 import 'package:appwrite/appwrite.dart';
 
-
 class LoginPage extends ConsumerStatefulWidget {
-  const LoginPage({Key? key}) : super(key: key);
+  const LoginPage({super.key});
 
   @override
   ConsumerState<LoginPage> createState() => _LoginPageState();
 }
 
 class _LoginPageState extends ConsumerState<LoginPage> {
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
   String _errorMessage = '';
   bool _isLoading = false;
 
@@ -24,19 +22,19 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       _errorMessage = '';
     });
 
-    final email = _emailController.text.trim();
-    final password = _passwordController.text.trim();
     final authController = ref.read(authControllerProvider);
 
     try {
-      await authController.login(email, password);
+      await authController.login(
+        _emailController.text.trim(),
+        _passwordController.text.trim(),
+      );
 
-      // Navegar a home si el login es exitoso
       if (!mounted) return;
       Navigator.pushReplacementNamed(context, '/home');
     } on AppwriteException catch (e) {
       setState(() {
-        _errorMessage = e.message ?? 'Error desconocido al iniciar sesión.';
+        _errorMessage = e.message ?? 'Error al iniciar sesión.';
       });
     } catch (e) {
       setState(() {
@@ -50,10 +48,11 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Iniciar Sesión')),
+      appBar: AppBar(title: const Text('Iniciar sesión')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             TextField(
               controller: _emailController,
@@ -74,6 +73,13 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                     onPressed: _handleLogin,
                     child: const Text('Iniciar sesión'),
                   ),
+            const SizedBox(height: 12),
+            TextButton(
+              onPressed: () {
+                Navigator.pushNamed(context, '/register');
+              },
+              child: const Text('¿No tienes cuenta? Regístrate'),
+            ),
           ],
         ),
       ),
