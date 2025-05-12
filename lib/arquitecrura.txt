@@ -16,7 +16,7 @@ lib/
 |   ├──providers/
 |   |   └── appwrite_providers.dart
 |   ├──theme/
-|       └── app_theme.dart 
+|       └── app_theme.dart  ////////////
 │
 ├── data/
 │   ├── repositories/
@@ -31,7 +31,7 @@ lib/
     │   ├── challenge_model.dart
     │   └── message_model.dart
 │   └── services/
-│       └── location_service.dart
+│       └── location_service.dart ///////////////////////////
 │
 
 │
@@ -47,7 +47,8 @@ lib/
 │   │   ├── join_team_page.dart
 │   │   ├── chat_page.dart
 │   │   ├── calendar_page.dart
-│   │   └── notifications_page.dart
+
+│   │   └── notifications_page.dart///
 │   └── widgets/
 │       ├── team_card.dart
 │       ├── challenge_card.dart
