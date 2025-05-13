@@ -6,6 +6,8 @@ import 'package:versus_match/controllers/auth_controller.dart';
 class SplashPage extends ConsumerStatefulWidget {
   const SplashPage({super.key});
 
+  static const routeName = '/';
+
   @override
   ConsumerState<SplashPage> createState() => _SplashPageState();
 }

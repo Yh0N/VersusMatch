@@ -6,6 +6,8 @@ import 'package:versus_match/controllers/auth_controller.dart';
 class RegisterPage extends ConsumerStatefulWidget {
   const RegisterPage({super.key});
 
+  static const routeName = '/register';
+
   @override
   ConsumerState<RegisterPage> createState() => _RegisterPageState();
 }

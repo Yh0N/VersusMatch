@@ -17,6 +17,7 @@ class AuthRepository {
 
   Future<void> logout() {
     return _account.deleteSession(sessionId: 'current');
+
   }
 
   Future<User> register({

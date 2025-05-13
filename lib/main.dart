@@ -17,16 +17,16 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Versus Match',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
         useMaterial3: true,
       ),
       debugShowCheckedModeBanner: false,
-      initialRoute: '/',
+      initialRoute: SplashPage.routeName,
       routes: {
-        '/': (context) => const SplashPage(),
-        '/login': (context) => const LoginPage(),
-        '/register': (context) => const RegisterPage(),
-        '/home': (context) => HomePage(),
+        SplashPage.routeName: (context) => const SplashPage(),
+        LoginPage.routeName: (context) => const LoginPage(),
+        RegisterPage.routeName: (context) => const RegisterPage(),
+        HomePage.routeName: (context) => const HomePage(),
       },
     );
   }

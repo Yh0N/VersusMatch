@@ -6,6 +6,8 @@ import 'package:appwrite/appwrite.dart';
 class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({super.key});
 
+  static const routeName = '/login';
+
   @override
   ConsumerState<LoginPage> createState() => _LoginPageState();
 }

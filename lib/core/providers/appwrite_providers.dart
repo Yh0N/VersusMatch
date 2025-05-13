@@ -5,12 +5,12 @@ import 'package:versus_match/data/repositories/challenge_repository.dart';
 import 'package:versus_match/data/repositories/chat_repository.dart';
 import 'package:versus_match/data/repositories/team_repository.dart';
 import 'package:versus_match/data/repositories/user_repository.dart';
-
+import 'package:versus_match/data/repositories/post_repository.dart';
 
 final clientProvider = Provider<Client>((ref) {
   return Client()
-    ..setEndpoint('https://cloud.appwrite.io/v1') // O tu endpoint
-    ..setProject('680e6eac0019ea6300d2'); // O tu project ID
+    ..setEndpoint('https://cloud.appwrite.io/v1') // O tu endpoint real
+    ..setProject('680e6eac0019ea6300d2'); // O tu Project ID real
 });
 
 final accountProvider = Provider<Account>((ref) {
@@ -39,7 +39,6 @@ final teamRepositoryProvider = Provider<TeamRepository>((ref) {
   return TeamRepository(db);
 });
 
-// Agregamos ChallengeRepository y ChatRepository
 final challengeRepositoryProvider = Provider<ChallengeRepository>((ref) {
   final db = ref.watch(dbProvider);
   return ChallengeRepository(db);
@@ -48,4 +47,9 @@ final challengeRepositoryProvider = Provider<ChallengeRepository>((ref) {
 final chatRepositoryProvider = Provider<ChatRepository>((ref) {
   final db = ref.watch(dbProvider);
   return ChatRepository(db);
+});
+
+final postRepositoryProvider = Provider<PostRepository>((ref) {
+  final db = ref.watch(dbProvider);
+  return PostRepository(db);
 });

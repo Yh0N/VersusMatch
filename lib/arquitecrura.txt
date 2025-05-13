@@ -16,7 +16,7 @@ lib/
 |   ├──providers/
 |   |   └── appwrite_providers.dart
 |   ├──theme/
-|       └── app_theme.dart  ////////////
+|       └── app_theme.dart
 │
 ├── data/
 │   ├── repositories/
@@ -31,7 +31,7 @@ lib/
     │   ├── challenge_model.dart
     │   └── message_model.dart
 │   └── services/
-│       └── location_service.dart ///////////////////////////
+│       └── location_service.dart
 │
 
 │
@@ -54,7 +54,7 @@ lib/
 │       ├── challenge_card.dart
 │       ├── calendar_widget.dart
 │       ├── message_bubble.dart
-│       ├── notification_tile.dart
+│       ├── notification_tile.dart////
 │       └── search_filter_bar.dart
 │
 └── main.dart

@@ -1,0 +1,62 @@
+users
+| Campo       | Tipo      | Obligatorio | Descripción                                     |
+| ----------- | --------- | ----------- | ----------------------------------------------- |
+| `username`  | `string`  | ✅ Sí        | Nombre de usuario visible                       |
+| `email`     | `email`   | ✅ Sí        | Correo electrónico del usuario                  |
+| `teamId`    | `string`  | ❌ No        | ID del equipo al que pertenece                  |
+| `position`  | `string`  | ❌ No        | Posición en el campo (portero, delantero, etc.) |
+| `avatarUrl` | `url`     | ❌ No        | Foto de perfil                                  |
+| `bio`       | `string`  | ❌ No        | Breve descripción del usuario                   |
+
+
+
+
+teams
+| Campo         | Tipo           | Obligatorio | Descripción                                 |
+| ------------- | -------------- | ----------- | ------------------------------------------- |
+| `name`        | `string`       | ✅ Sí        | Nombre del equipo                           |
+| `location`    | `string`       | ✅ Sí        | Ciudad o zona geográfica                    |
+| `logoUrl`     | `url`          | ❌ No        | Imagen/logo del equipo                      |
+| `members`     | `list<string>` | ❌ No        | Lista de IDs de usuarios                    |
+| `description` | `string`       | ❌ No        | Descripción breve del equipo                |
+| `createdBy`   | `string`       | ❌ No        | ID del usuario que creó el equipo           |
+| `openToJoin`  | `boolean`      | ❌ No        | Si el equipo está buscando nuevos jugadores |
+
+
+challenges
+| Campo          | Tipo       | Obligatorio | Descripción                                 |
+| -------------- | ---------- | ----------- | ------------------------------------------- |
+| `fromTeamId`   | `string`   | ✅ Sí        | ID del equipo que manda el reto             |
+| `toTeamId`     | `string`   | ✅ Sí        | ID del equipo que recibe el reto            |
+| `status`       | `enum`     | ✅ Sí        | `"pending"`, `"accepted"`, `"rejected"`     |
+| `date`         | `datetime` | ✅ Sí        | Fecha propuesta para el partido             |
+| `message`      | `string`   | ❌ No        | Mensaje adicional del reto                  |
+| `createdBy`    | `string`   | ❌ No        | Usuario que envió el reto                   |
+| `responseDate` | `datetime` | ❌ No        | Fecha en la que se aceptó o rechazó el reto |
+
+
+matches
+| Campo         | Tipo       | Obligatorio | Descripción                                      |
+| ------------- | ---------- | ----------- | ------------------------------------------------ |
+| `teamAId`     | `string`   | ✅ Sí        | ID del primer equipo                             |
+| `teamBId`     | `string`   | ✅ Sí        | ID del segundo equipo                            |
+| `matchDate`   | `datetime` | ✅ Sí        | Fecha del partido                                |
+| `location`    | `string`   | ✅ Sí        | Lugar donde se jugará                            |
+| `scoreA`      | `integer`  | ❌ No        | Goles del equipo A                               |
+| `scoreB`      | `integer`  | ❌ No        | Goles del equipo B                               |
+| `challengeId` | `string`   | ❌ No        | ID del reto que originó este partido (si aplica) |
+
+posts
+| Campo         | Tipo           | Obligatorio | Descripción                                                 |
+| ------------- | -------------- | ----------- | ----------------------------------------------------------- |
+| `authorId`    | `string`       | ✅ Sí        | ID del usuario que crea el post                             |
+| `type`        | `enum`         | ✅ Sí        | `"challenge"`, `"text"`, `"update"`, `"match_result"`, etc. |
+| `content`     | `string`       | ✅ Sí        | Texto principal del post                                    |
+| `imageUrl`    | `url`          | ❌ No        | Imagen del post (por ejemplo, logo del equipo)              |
+| `challengeId` | `string`       | ❌ No        | ID del challenge relacionado (si es un reto publicado)      |
+| `teamId`      | `string`       | ❌ No        | Si el post es en nombre de un equipo                        |
+| `likes`       | `list<string>` | ❌ No        | Lista de IDs de usuarios que dieron like                    |
+| `comments`    | `list<string>` | ❌ No        | Lista de IDs de comentarios (o usar colección aparte)       |
+| `createdAt`   | `datetime`     | ✅ Sí        | Fecha de creación del post                                  |
+
+
