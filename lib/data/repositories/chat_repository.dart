@@ -1,8 +1,7 @@
 import 'package:appwrite/appwrite.dart';
 import 'package:versus_match/core/constants/appwrite_constants.dart';
 import 'package:versus_match/data/models/message_model.dart';
-import 'package:versus_match/data/models/user_model.dart';
-import 'package:versus_match/data/models/team_model.dart';
+
 
 class ChatRepository {
   final Databases _db;

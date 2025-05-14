@@ -38,6 +38,7 @@ lib/
 ├── presentation/
 │   ├── pages/
 │   │   ├── splash_page.dart
+|   |   ├──create_post_page.dart
 │   │   ├── login_page.dart
 │   │   ├── register_page.dart
 │   │   ├── home_page.dart

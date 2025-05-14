@@ -49,6 +49,7 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^5.0.0
+  image_picker: ^1.0.4
 
 dependency_overrides:
   flutter_web_auth_2: 4.1.0

@@ -39,17 +39,29 @@ class PostModel {
   }
 
   // Convertir de PostModel a Map (para guardar en Appwrite)
-  Map<String, dynamic> toMap() {
-    return {
-      'authorId': authorId,
-      'type': type,
-      'content': content,
-      'imageUrl': imageUrl,
-      'challengeId': challengeId,
-      'teamId': teamId,
-      'likes': likes,
-      'comments': comments,
-      'createdAt': createdAt.toIso8601String(),
-    };
+ Map<String, dynamic> toMap() {
+  final map = {
+    'authorId': authorId,
+    'type': type,
+    'content': content,
+    'likes': likes,
+    'comments': comments,
+    'createdAt': createdAt.toIso8601String(),
+  };
+
+  if (imageUrl != null) {
+    map['imageUrl'] = imageUrl as Object; // solo agregar si no es null
   }
+
+  if (challengeId != null) {
+    map['challengeId'] = challengeId as Object;
+  }
+
+  if (teamId != null) {
+    map['teamId'] = teamId as Object;
+  }
+
+  return map;
+}
+
 }

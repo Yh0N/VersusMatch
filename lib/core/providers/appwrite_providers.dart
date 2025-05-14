@@ -9,8 +9,8 @@ import 'package:versus_match/data/repositories/post_repository.dart';
 
 final clientProvider = Provider<Client>((ref) {
   return Client()
-    ..setEndpoint('https://cloud.appwrite.io/v1') // O tu endpoint real
-    ..setProject('680e6eac0019ea6300d2'); // O tu Project ID real
+    ..setEndpoint('https://cloud.appwrite.io/v1')
+    ..setProject('680e6eac0019ea6300d2');
 });
 
 final accountProvider = Provider<Account>((ref) {
@@ -18,9 +18,24 @@ final accountProvider = Provider<Account>((ref) {
   return Account(client);
 });
 
+final teamsProvider = FutureProvider((ref) async {
+  final account = ref.read(accountProvider);
+  return await account.get();
+});
+
+final currentUserProvider = FutureProvider((ref) async {
+  final account = ref.read(accountProvider);
+  return await account.get();
+});
+
 final dbProvider = Provider<Databases>((ref) {
   final client = ref.watch(clientProvider);
   return Databases(client);
+});
+
+final storageProvider = Provider<Storage>((ref) {
+  final client = ref.watch(clientProvider);
+  return Storage(client);
 });
 
 // Repositorios
