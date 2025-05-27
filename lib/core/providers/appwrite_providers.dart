@@ -3,7 +3,6 @@ import 'package:appwrite/appwrite.dart';
 import 'package:versus_match/data/repositories/auth_repository.dart';
 import 'package:versus_match/data/repositories/challenge_repository.dart';
 import 'package:versus_match/data/repositories/chat_repository.dart';
-import 'package:versus_match/data/repositories/team_repository.dart';
 import 'package:versus_match/data/repositories/user_repository.dart';
 import 'package:versus_match/data/repositories/post_repository.dart';
 
@@ -46,17 +45,15 @@ final authRepositoryProvider = Provider<AuthRepository>((ref) {
 
 final userRepositoryProvider = Provider<UserRepository>((ref) {
   final db = ref.watch(dbProvider);
-  return UserRepository(db);
+  final account = ref.watch(accountProvider);
+  return UserRepository(db, account);
 });
 
-final teamRepositoryProvider = Provider<TeamRepository>((ref) {
-  final db = ref.watch(dbProvider);
-  return TeamRepository(db);
-});
 
-final challengeRepositoryProvider = Provider<ChallengeRepository>((ref) {
+
+final challengesRepositoryProvider = Provider<ChallengesRepository>((ref) {
   final db = ref.watch(dbProvider);
-  return ChallengeRepository(db);
+  return ChallengesRepository(db);
 });
 
 final chatRepositoryProvider = Provider<ChatRepository>((ref) {

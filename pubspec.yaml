@@ -38,6 +38,9 @@ dependencies:
   appwrite: ^15.0.1
   flutter_riverpod: ^2.4.0    
   flutter_hooks: ^0.20.0   
+  uuid: ^4.0.0
+  jwt_decoder: ^2.0.1
+
 
 dev_dependencies:
   flutter_test:

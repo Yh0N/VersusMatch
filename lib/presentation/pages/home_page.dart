@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:versus_match/controllers/auth_controller.dart';
 import 'package:versus_match/controllers/post_controller.dart';
 import 'package:versus_match/data/models/post_model.dart';
 import 'package:versus_match/presentation/pages/create_post_page.dart';
+import 'package:versus_match/presentation/pages/create_team_page.dart';
 
 class HomePage extends ConsumerWidget {
   const HomePage({super.key});
@@ -18,9 +20,47 @@ class HomePage extends ConsumerWidget {
         title: const Text('Versus Match'),
         centerTitle: true,
       ),
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            const DrawerHeader(
+              decoration: BoxDecoration(
+                color: Colors.blue,
+              ),
+              child: Text(
+                'Menú',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 24,
+                ),
+              ),
+            ),
+            ListTile(
+              leading: const Icon(Icons.person),
+              title: const Text('Perfil'),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.pushNamed(context, '/profile');
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.logout),
+              title: const Text('Cerrar sesión'),
+              onTap: () async {
+                Navigator.pop(context);
+                await ref.read(authControllerProvider).logout();
+                if (context.mounted) {
+                  Navigator.pushReplacementNamed(context, '/login');
+                }
+              },
+            ),
+          ],
+        ),
+      ),
       body: Column(
         children: [
-          // 🔹 Botones superiores debajo del AppBar
+          // 🔹 Botones de acción
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             child: Container(
@@ -32,13 +72,13 @@ class HomePage extends ConsumerWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  // Botón: Crear publicación
                   ElevatedButton.icon(
                     onPressed: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const CreatePostPage()),
+                          builder: (context) => const CreatePostPage(),
+                        ),
                       );
                     },
                     icon: const Icon(Icons.add),
@@ -49,7 +89,6 @@ class HomePage extends ConsumerWidget {
                       ),
                     ),
                   ),
-                  // Botón: Retar equipo
                   ElevatedButton.icon(
                     onPressed: () {
                       Navigator.pushNamed(context, '/challenge');
@@ -58,6 +97,19 @@ class HomePage extends ConsumerWidget {
                     label: const Text("Retar"),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.orange,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                    ),
+                  ),
+                  ElevatedButton.icon(
+                    onPressed: () {
+                      Navigator.pushNamed(context, CreateTeamPage.routeName);
+                    },
+                    icon: const Icon(Icons.group_add),
+                    label: const Text("Crear Equipo"),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.green,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30),
                       ),

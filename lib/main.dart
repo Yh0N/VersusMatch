@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import 'package:versus_match/presentation/pages/splash_page.dart';
 import 'package:versus_match/presentation/pages/login_page.dart';
 import 'package:versus_match/presentation/pages/register_page.dart';
 import 'package:versus_match/presentation/pages/home_page.dart';
+import 'package:versus_match/presentation/pages/challenge_page.dart';
+import 'package:versus_match/presentation/pages/create_team_page.dart'; // 👈 Agregado
 
 void main() {
   runApp(const ProviderScope(child: MyApp()));
@@ -27,6 +30,8 @@ class MyApp extends StatelessWidget {
         LoginPage.routeName: (context) => const LoginPage(),
         RegisterPage.routeName: (context) => const RegisterPage(),
         HomePage.routeName: (context) => const HomePage(),
+        ChallengePage.routeName: (context) => const ChallengePage(),
+        CreateTeamPage.routeName: (context) => const CreateTeamPage(), // 👈 Agregado
       },
     );
   }
