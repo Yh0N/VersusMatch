@@ -1,6 +1,5 @@
-// lib/data/models/post_model.dart
-
 class PostModel {
+  final String id; // <--- ID del documento en Appwrite
   final String authorId;
   final String type;
   final String content;
@@ -12,6 +11,7 @@ class PostModel {
   final DateTime createdAt;
 
   PostModel({
+    required this.id, // <--- AGREGA ESTO
     required this.authorId,
     required this.type,
     required this.content,
@@ -26,6 +26,7 @@ class PostModel {
   // Convertir de Map a PostModel (para usar con Appwrite)
   factory PostModel.fromMap(Map<String, dynamic> map) {
     return PostModel(
+      id: map['\$id'] ?? '', // Appwrite usa '$id' para el id del documento
       authorId: map['authorId'],
       type: map['type'],
       content: map['content'],
@@ -39,29 +40,25 @@ class PostModel {
   }
 
   // Convertir de PostModel a Map (para guardar en Appwrite)
- Map<String, dynamic> toMap() {
-  final map = {
-    'authorId': authorId,
-    'type': type,
-    'content': content,
-    'likes': likes,
-    'comments': comments,
-    'createdAt': createdAt.toIso8601String(),
-  };
+  Map<String, dynamic> toMap() {
+    final map = {
+      'authorId': authorId,
+      'type': type,
+      'content': content,
+      'likes': likes,
+      'comments': comments,
+      'createdAt': createdAt.toIso8601String(),
+    };
 
-  if (imageUrl != null) {
-    map['imageUrl'] = imageUrl as Object; // solo agregar si no es null
+    if (imageUrl != null) {
+      map['imageUrl'] = imageUrl as Object;
+    }
+    if (challengeId != null) {
+      map['challengeId'] = challengeId as Object;
+    }
+    if (teamId != null) {
+      map['teamId'] = teamId as Object;
+    }
+    return map;
   }
-
-  if (challengeId != null) {
-    map['challengeId'] = challengeId as Object;
-  }
-
-  if (teamId != null) {
-    map['teamId'] = teamId as Object;
-  }
-
-  return map;
-}
-
 }

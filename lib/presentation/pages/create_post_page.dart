@@ -43,11 +43,12 @@ class _CreatePostPageState extends ConsumerState<CreatePostPage> {
     final authorId = user.$id;
 
     final newPost = PostModel(
+      id: '', // <--- agrega esto, Appwrite lo asignará al guardar
       content: content,
       imageUrl: uploadedImageUrl,
       type: postType,
       createdAt: DateTime.now(),
-      authorId: authorId, // ✅ Aquí se asigna correctamente
+      authorId: authorId,
       likes: [],
       comments: [],
     );

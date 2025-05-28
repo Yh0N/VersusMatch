@@ -78,4 +78,21 @@ class PostController {
       return null;
     }
   }
+
+  /// Dar o quitar like a un post
+  Future<void> toggleLike(PostModel post, String userId) async {
+    final likes = List<String>.from(post.likes);
+    if (likes.contains(userId)) {
+      likes.remove(userId);
+    } else {
+      likes.add(userId);
+    }
+    await updatePost(post.id, {'likes': likes});
+  }
+
+  /// Agregar un comentario a un post
+  Future<void> addComment(PostModel post, String comment) async {
+    final comments = List<String>.from(post.comments)..add(comment);
+    await updatePost(post.id, {'comments': comments});
+  }
 }

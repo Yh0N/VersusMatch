@@ -4,9 +4,9 @@ import 'package:versus_match/controllers/post_controller.dart';
 import 'package:versus_match/core/providers/appwrite_providers.dart';
 import 'package:versus_match/data/models/user_model.dart';
 import 'package:versus_match/data/models/post_model.dart';
-import 'package:versus_match/presentation/pages/home_page.dart'; // Importa el PostCard
-import 'package:versus_match/presentation/pages/edit_profile_page.dart'; // Importa la página de edición
-import 'package:versus_match/data/models/team_model.dart'; // Asegúrate de tener este modelo
+import 'package:versus_match/presentation/pages/edit_profile_page.dart';
+import 'package:versus_match/data/models/team_model.dart';
+import 'package:versus_match/presentation/widgets/beautiful_post_card.dart';
 
 class ProfilePage extends ConsumerWidget {
   const ProfilePage({super.key});
@@ -113,7 +113,7 @@ class ProfilePage extends ConsumerWidget {
                           itemCount: posts.length,
                           itemBuilder: (context, index) {
                             final post = posts[index];
-                            return PostCard(post: post);
+                            return BeautifulPostCard(post: post, user: user);
                           },
                         );
                       },
