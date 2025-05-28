@@ -7,14 +7,14 @@ import 'package:versus_match/data/repositories/post_repository.dart';
 
 // Provider para acceder al repositorio desde otras clases
 final postRepositoryProvider = Provider<PostRepository>((ref) {
-  final db = ref.read(dbProvider); // <- base de datos Appwrite
+  final db = ref.read(dbProvider); // base de datos Appwrite
   return PostRepository(db);
 });
 
 // Provider del controlador de publicaciones
 final postControllerProvider = Provider<PostController>((ref) {
-  final repo = ref.read(postRepositoryProvider); // <- instancia del repositorio
-  final storage = ref.read(storageProvider);     // <- acceso a Storage de Appwrite
+  final repo = ref.read(postRepositoryProvider); // instancia del repositorio
+  final storage = ref.read(storageProvider);     // acceso a Storage de Appwrite
   return PostController(repo, storage);
 });
 
@@ -22,8 +22,8 @@ class PostController {
   final PostRepository _repo;
   final Storage _storage;
 
-  // El bucket ID de Appwrite (debes asegurarte que sea correcto)
-  static const String _bucketId = '6824089f00254a004c46'; 
+  // El bucket ID de Appwrite (ajusta si es necesario)
+  static const String _bucketId = '6824089f00254a004c46';
 
   PostController(this._repo, this._storage);
 
@@ -43,6 +43,10 @@ class PostController {
   /// Obtener publicaciones por ID de equipo
   Future<List<PostModel>> getPostsByTeam(String teamId) =>
       _repo.getPostsByTeam(teamId);
+
+  /// Obtener publicaciones por ID de usuario
+  Future<List<PostModel>> getPostsByUser(String userId) =>
+      _repo.getPostsByUser(userId);
 
   /// Eliminar una publicación
   Future<void> deletePost(String postId) => _repo.deletePost(postId);

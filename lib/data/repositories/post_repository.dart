@@ -30,11 +30,12 @@ class PostRepository {
         databaseId: AppwriteConstants.databaseId,
         collectionId: AppwriteConstants.postsCollectionId,
         queries: [
-          Query.orderDesc('createdAt'),
+          Query.orderDesc('\$createdAt'),
         ],
       );
-
-      return result.documents.map((doc) => PostModel.fromMap(doc.data)).toList();
+      return result.documents
+          .map((doc) => PostModel.fromMap(doc.data))
+          .toList();
     } catch (e) {
       print('❌ Error al obtener posts: $e');
       return [];
@@ -48,14 +49,35 @@ class PostRepository {
         databaseId: AppwriteConstants.databaseId,
         collectionId: AppwriteConstants.postsCollectionId,
         queries: [
-          Query.equal('teamId', teamId),
-          Query.orderDesc('createdAt'),
+          Query.equal('teamId', [teamId]),
+          Query.orderDesc('\$createdAt'),
         ],
       );
-
-      return result.documents.map((doc) => PostModel.fromMap(doc.data)).toList();
+      return result.documents
+          .map((doc) => PostModel.fromMap(doc.data))
+          .toList();
     } catch (e) {
       print('❌ Error al obtener posts por equipo: $e');
+      return [];
+    }
+  }
+
+  /// Obtiene posts filtrados por usuario
+  Future<List<PostModel>> getPostsByUser(String userId) async {
+    try {
+      final result = await _db.listDocuments(
+        databaseId: AppwriteConstants.databaseId,
+        collectionId: AppwriteConstants.postsCollectionId,
+        queries: [
+          Query.equal('authorId', [userId]),
+          Query.orderDesc('\$createdAt'),
+        ],
+      );
+      return result.documents
+          .map((doc) => PostModel.fromMap(doc.data))
+          .toList();
+    } catch (e) {
+      print('❌ Error al obtener posts por usuario: $e');
       return [];
     }
   }

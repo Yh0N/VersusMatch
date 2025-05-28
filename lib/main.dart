@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:versus_match/presentation/pages/profile_page.dart';
 
 import 'package:versus_match/presentation/pages/splash_page.dart';
 import 'package:versus_match/presentation/pages/login_page.dart';
@@ -31,6 +32,7 @@ class MyApp extends StatelessWidget {
         RegisterPage.routeName: (context) => const RegisterPage(),
         HomePage.routeName: (context) => const HomePage(),
         ChallengePage.routeName: (context) => const ChallengePage(),
+        ProfilePage.routeName: (context) => const ProfilePage(),
         CreateTeamPage.routeName: (context) => const CreateTeamPage(), // 👈 Agregado
       },
     );

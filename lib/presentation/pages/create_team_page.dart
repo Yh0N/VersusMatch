@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:versus_match/controllers/team_controller.dart';
 import 'package:versus_match/core/providers/appwrite_providers.dart';
+import 'package:versus_match/data/services/location_service.dart';
 
 class CreateTeamPage extends ConsumerStatefulWidget {
   const CreateTeamPage({Key? key}) : super(key: key);
@@ -44,6 +45,20 @@ class _CreateTeamPageState extends ConsumerState<CreateTeamPage> {
     }
   }
 
+  Future<void> _getCurrentLocation() async {
+    final locationService = LocationService();
+    final position = await locationService.getCurrentLocation();
+    if (position != null) {
+      setState(() {
+        _locationController.text = '${position.latitude},${position.longitude}';
+      });
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('No se pudo obtener la ubicación')),
+      );
+    }
+  }
+
   Future<void> _createTeam() async {
     final name = _teamNameController.text.trim();
     final location = _locationController.text.trim();
@@ -68,7 +83,8 @@ class _CreateTeamPageState extends ConsumerState<CreateTeamPage> {
     setState(() => _isLoading = true);
 
     try {
-      await ref.read(teamControllerProvider).createTeamWithLogo(
+      // Usamos el método que crea el equipo y une al usuario automáticamente
+      await ref.read(teamControllerProvider).createTeamWithLogoAndJoinUser(
         logoFile: _logoImageFile!,
         name: name,
         location: location,
@@ -78,7 +94,7 @@ class _CreateTeamPageState extends ConsumerState<CreateTeamPage> {
       );
 
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Equipo creado exitosamente')),
+        const SnackBar(content: Text('Equipo creado y te uniste automáticamente')),
       );
       Navigator.of(context).pop();
     } catch (e) {
@@ -110,9 +126,24 @@ class _CreateTeamPageState extends ConsumerState<CreateTeamPage> {
               controller: _teamNameController,
               decoration: const InputDecoration(labelText: 'Nombre del equipo'),
             ),
-            TextField(
-              controller: _locationController,
-              decoration: const InputDecoration(labelText: 'Ubicación'),
+            Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: _locationController,
+                    decoration: const InputDecoration(labelText: 'Ubicación'),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                ElevatedButton.icon(
+                  icon: const Icon(Icons.my_location),
+                  label: const Text('Ubicación actual'),
+                  onPressed: _getCurrentLocation,
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                  ),
+                ),
+              ],
             ),
             TextField(
               controller: _descriptionController,

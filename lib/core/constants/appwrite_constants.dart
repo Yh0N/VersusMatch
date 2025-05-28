@@ -8,7 +8,7 @@ class AppwriteConstants {
   static const String usersCollectionId = '681921370037c66ca2a7';
   static const String teamsCollectionId = '681923520012503f1963';
   static const String matchesCollectionId = '681926290009fde49140';
-  static const String challengesCollectionId = '681929790001c5182f37';
+  static const String challengesCollectionId = '681926290009fde49140';
   static const String postsCollectionId = '68227df9002677b53965';
 
   // Para Auth
