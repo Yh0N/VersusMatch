@@ -6,6 +6,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:versus_match/controllers/team_controller.dart';
 import 'package:versus_match/core/providers/appwrite_providers.dart';
 import 'package:versus_match/data/services/location_service.dart';
+import 'package:versus_match/presentation/widgets/team_form.dart';
 
 class CreateTeamPage extends ConsumerStatefulWidget {
   const CreateTeamPage({Key? key}) : super(key: key);
@@ -83,7 +84,6 @@ class _CreateTeamPageState extends ConsumerState<CreateTeamPage> {
     setState(() => _isLoading = true);
 
     try {
-      // Usamos el método que crea el equipo y une al usuario automáticamente
       await ref.read(teamControllerProvider).createTeamWithLogoAndJoinUser(
         logoFile: _logoImageFile!,
         name: name,
@@ -117,78 +117,25 @@ class _CreateTeamPageState extends ConsumerState<CreateTeamPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Crear Equipo')),
+      appBar: AppBar(
+        title: const Text('Crear Equipo', style: TextStyle(color: Colors.black)),
+        backgroundColor: Colors.white,
+        elevation: 0,
+        iconTheme: const IconThemeData(color: Colors.black),
+      ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            TextField(
-              controller: _teamNameController,
-              decoration: const InputDecoration(labelText: 'Nombre del equipo'),
-            ),
-            Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    controller: _locationController,
-                    decoration: const InputDecoration(labelText: 'Ubicación'),
-                  ),
-                ),
-                const SizedBox(width: 8),
-                ElevatedButton.icon(
-                  icon: const Icon(Icons.my_location),
-                  label: const Text('Ubicación actual'),
-                  onPressed: _getCurrentLocation,
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-                  ),
-                ),
-              ],
-            ),
-            TextField(
-              controller: _descriptionController,
-              decoration: const InputDecoration(labelText: 'Descripción (opcional)'),
-            ),
-            const SizedBox(height: 16),
-            Row(
-              children: [
-                Checkbox(
-                  value: _openToJoin,
-                  onChanged: (value) {
-                    setState(() {
-                      _openToJoin = value ?? false;
-                    });
-                  },
-                ),
-                const Text('Abierto a nuevos jugadores'),
-              ],
-            ),
-            if (_logoImageFile != null)
-              Padding(
-                padding: const EdgeInsets.only(bottom: 12.0),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(8),
-                  child: Image.file(
-                    _logoImageFile!,
-                    width: 150,
-                    height: 150,
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ),
-            ElevatedButton.icon(
-              onPressed: _pickLogoFromGallery,
-              icon: const Icon(Icons.image),
-              label: const Text('Seleccionar logo desde galería'),
-            ),
-            const SizedBox(height: 20),
-            _isLoading
-                ? const CircularProgressIndicator()
-                : ElevatedButton(
-                    onPressed: _createTeam,
-                    child: const Text('Crear Equipo'),
-                  ),
-          ],
+        padding: const EdgeInsets.all(18.0),
+        child: TeamForm(
+          nameController: _teamNameController,
+          locationController: _locationController,
+          descriptionController: _descriptionController,
+          onPickLogo: _pickLogoFromGallery,
+          onGetLocation: _getCurrentLocation,
+          onSubmit: _createTeam,
+          isLoading: _isLoading,
+          logoImageFile: _logoImageFile,
+          openToJoin: _openToJoin,
+          onOpenToJoinChanged: (v) => setState(() => _openToJoin = v ?? false),
         ),
       ),
     );

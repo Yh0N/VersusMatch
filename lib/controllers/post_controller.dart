@@ -90,9 +90,24 @@ class PostController {
     await updatePost(post.id, {'likes': likes});
   }
 
-  /// Agregar un comentario a un post
-  Future<void> addComment(PostModel post, String comment) async {
-    final comments = List<String>.from(post.comments)..add(comment);
+  /// Agregar un comentario a un post (con nombre y avatar)
+  Future<void> addComment(
+    PostModel post,
+    String text,
+    String username,
+    String avatarUrl,
+  ) async {
+    final comments = List<Map<String, dynamic>>.from(post.comments)
+      ..add({
+        'username': username,
+        'avatarUrl': avatarUrl,
+        'text': text,
+      });
     await updatePost(post.id, {'comments': comments});
+  }
+
+  /// Aceptar un challenge
+  Future<void> acceptChallenge(PostModel post, String userId) async {
+    await updatePost(post.id, {'acceptedBy': userId});
   }
 }

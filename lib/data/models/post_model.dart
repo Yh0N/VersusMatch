@@ -1,5 +1,5 @@
 class PostModel {
-  final String id; // <--- ID del documento en Appwrite
+  final String id; // ID del documento en Appwrite
   final String authorId;
   final String type;
   final String content;
@@ -7,11 +7,12 @@ class PostModel {
   final String? challengeId;
   final String? teamId;
   final List<String> likes;
-  final List<String> comments;
+  final List<Map<String, dynamic>> comments; // Lista de mapas para comentarios ricos
   final DateTime createdAt;
+  final String? acceptedBy; // Quién aceptó el challenge
 
   PostModel({
-    required this.id, // <--- AGREGA ESTO
+    required this.id,
     required this.authorId,
     required this.type,
     required this.content,
@@ -21,12 +22,32 @@ class PostModel {
     required this.likes,
     required this.comments,
     required this.createdAt,
+    this.acceptedBy,
   });
 
   // Convertir de Map a PostModel (para usar con Appwrite)
   factory PostModel.fromMap(Map<String, dynamic> map) {
+    // Soporta comentarios antiguos (String) y nuevos (Map)
+    List<Map<String, dynamic>> parsedComments = [];
+    if (map['comments'] != null) {
+      if (map['comments'].isNotEmpty && map['comments'][0] is String) {
+        // Comentarios antiguos: solo texto
+        parsedComments = List<String>.from(map['comments'])
+            .map((c) => {
+                  'username': 'Usuario',
+                  'avatarUrl': '',
+                  'text': c,
+                })
+            .toList();
+      } else {
+        // Comentarios nuevos: mapas
+        parsedComments = List<Map<String, dynamic>>.from(
+            (map['comments'] as List).map((c) => Map<String, dynamic>.from(c)));
+      }
+    }
+
     return PostModel(
-      id: map['\$id'] ?? '', // Appwrite usa '$id' para el id del documento
+      id: map['\$id'] ?? '',
       authorId: map['authorId'],
       type: map['type'],
       content: map['content'],
@@ -34,8 +55,9 @@ class PostModel {
       challengeId: map['challengeId'],
       teamId: map['teamId'],
       likes: List<String>.from(map['likes'] ?? []),
-      comments: List<String>.from(map['comments'] ?? []),
+      comments: parsedComments,
       createdAt: DateTime.parse(map['createdAt']),
+      acceptedBy: map['acceptedBy'],
     );
   }
 
@@ -48,16 +70,17 @@ class PostModel {
       'likes': likes,
       'comments': comments,
       'createdAt': createdAt.toIso8601String(),
+      'acceptedBy': acceptedBy,
     };
 
     if (imageUrl != null) {
-      map['imageUrl'] = imageUrl as Object;
+      map['imageUrl'] = imageUrl;
     }
     if (challengeId != null) {
-      map['challengeId'] = challengeId as Object;
+      map['challengeId'] = challengeId;
     }
     if (teamId != null) {
-      map['teamId'] = teamId as Object;
+      map['teamId'] = teamId;
     }
     return map;
   }

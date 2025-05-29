@@ -34,67 +34,134 @@ class ProfilePage extends ConsumerWidget {
             }
             final user = userSnap.data!;
             return Scaffold(
-              appBar: AppBar(title: const Text('Perfil')),
+              appBar: AppBar(
+                title: const Text('Perfil', style: TextStyle(color: Colors.black)),
+                backgroundColor: Colors.white,
+                elevation: 0,
+                iconTheme: const IconThemeData(color: Colors.black),
+              ),
               body: SingleChildScrollView(
-                padding: const EdgeInsets.all(16),
+                padding: const EdgeInsets.all(18),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    // Foto de perfil centrada y redonda
+                    // Foto de perfil centrada y redonda con borde y sombra
                     Center(
-                      child: CircleAvatar(
-                        radius: 50,
-                        backgroundImage: user.avatarUrl != null && user.avatarUrl!.isNotEmpty
-                            ? NetworkImage(user.avatarUrl!)
-                            : const AssetImage('assets/default_avatar.png') as ImageProvider,
+                      child: Material(
+                        elevation: 6,
+                        shape: const CircleBorder(),
+                        shadowColor: Colors.deepPurple.withOpacity(0.15),
+                        child: CircleAvatar(
+                          radius: 54,
+                          backgroundColor: Colors.deepPurple.withOpacity(0.08),
+                          child: CircleAvatar(
+                            radius: 50,
+                            backgroundImage: user.avatarUrl != null && user.avatarUrl!.isNotEmpty
+                                ? NetworkImage(user.avatarUrl!)
+                                : const AssetImage('assets/default_avatar.png') as ImageProvider,
+                          ),
+                        ),
                       ),
                     ),
-                    const SizedBox(height: 16),
-                    // Información centrada
+                    const SizedBox(height: 18),
+                    // Información centrada y estilizada
                     Center(
                       child: Column(
                         children: [
                           Text(
                             user.username,
-                            style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                            style: const TextStyle(
+                              fontSize: 26,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.deepPurple,
+                            ),
                           ),
-                          const SizedBox(height: 8),
-                          Text(user.email, style: const TextStyle(fontSize: 16)),
+                          const SizedBox(height: 6),
+                          Text(
+                            user.email,
+                            style: const TextStyle(fontSize: 16, color: Colors.black54),
+                          ),
                           if (user.position != null)
-                            Text('Posición: ${user.position!}', style: const TextStyle(fontSize: 16)),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 4),
+                              child: Chip(
+                                label: Text('Posición: ${user.position!}'),
+                                backgroundColor: Colors.deepPurple.withOpacity(0.08),
+                                labelStyle: const TextStyle(color: Colors.deepPurple),
+                              ),
+                            ),
                           if (user.teamId != null)
-                            FutureBuilder<TeamModel>(
-                              future: ref.read(teamRepositoryProvider).getTeamById(user.teamId!),
-                              builder: (context, teamSnap) {
-                                if (teamSnap.connectionState == ConnectionState.waiting) {
-                                  return const Text('Equipo: ...', style: TextStyle(fontSize: 16));
-                                }
-                                if (teamSnap.hasData) {
-                                  return Text('Equipo: ${teamSnap.data!.name}', style: const TextStyle(fontSize: 16));
-                                }
-                                return const Text('Equipo: desconocido', style: TextStyle(fontSize: 16));
-                              },
+                            Padding(
+                              padding: const EdgeInsets.only(top: 4),
+                              child: FutureBuilder<TeamModel>(
+                                future: ref.read(teamRepositoryProvider).getTeamById(user.teamId!),
+                                builder: (context, teamSnap) {
+                                  if (teamSnap.connectionState == ConnectionState.waiting) {
+                                    return const Chip(
+                                      label: Text('Equipo: ...'),
+                                      backgroundColor: Color(0xFFEDE7F6),
+                                      labelStyle: TextStyle(color: Colors.deepPurple),
+                                    );
+                                  }
+                                  if (teamSnap.hasData) {
+                                    return Chip(
+                                      label: Text('Equipo: ${teamSnap.data!.name}'),
+                                      backgroundColor: Colors.deepPurple.withOpacity(0.08),
+                                      labelStyle: const TextStyle(color: Colors.deepPurple),
+                                    );
+                                  }
+                                  return const Chip(
+                                    label: Text('Equipo: desconocido'),
+                                    backgroundColor: Color(0xFFEDE7F6),
+                                    labelStyle: TextStyle(color: Colors.deepPurple),
+                                  );
+                                },
+                              ),
                             ),
                         ],
                       ),
                     ),
-                    const SizedBox(height: 12),
-                    ElevatedButton(
-                      onPressed: () async {
-                        final updatedUser = await Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => EditProfilePage(user: user),
+                    const SizedBox(height: 16),
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton.icon(
+                        onPressed: () async {
+                          final updatedUser = await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => EditProfilePage(user: user),
+                            ),
+                          );
+                          if (updatedUser != null) {
+                            // Puedes actualizar el estado si lo necesitas
+                          }
+                        },
+                        icon: const Icon(Icons.edit, color: Colors.deepPurple),
+                        label: const Text(
+                          'Editar perfil',
+                          style: TextStyle(
+                            color: Colors.deepPurple,
+                            fontWeight: FontWeight.bold,
                           ),
-                        );
-                        if (updatedUser != null) {
-                          // Puedes actualizar el estado si lo necesitas
-                        }
-                      },
-                      child: const Text('Editar perfil'),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.white,
+                          elevation: 2,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(14),
+                            side: BorderSide(color: Colors.deepPurple.withOpacity(0.2)),
+                          ),
+                        ),
+                      ),
                     ),
-                    const Divider(height: 32),
-                    const Text('Publicaciones', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                    const Divider(height: 36, thickness: 1.2),
+                    const Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'Publicaciones',
+                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.deepPurple),
+                      ),
+                    ),
                     const SizedBox(height: 8),
                     // Publicaciones del usuario
                     FutureBuilder<List<PostModel>>(
@@ -105,12 +172,16 @@ class ProfilePage extends ConsumerWidget {
                         }
                         final posts = postSnap.data ?? [];
                         if (posts.isEmpty) {
-                          return const Text('No has publicado nada aún.');
+                          return const Padding(
+                            padding: EdgeInsets.symmetric(vertical: 24),
+                            child: Text('No has publicado nada aún.', style: TextStyle(color: Colors.black54)),
+                          );
                         }
-                        return ListView.builder(
+                        return ListView.separated(
                           shrinkWrap: true,
                           physics: const NeverScrollableScrollPhysics(),
                           itemCount: posts.length,
+                          separatorBuilder: (_, __) => const SizedBox(height: 14),
                           itemBuilder: (context, index) {
                             final post = posts[index];
                             return BeautifulPostCard(post: post, user: user);
